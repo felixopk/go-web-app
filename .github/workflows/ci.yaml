@@ -93,6 +93,11 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 0
+      - name: Sync with latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
 
       - name: Update Helm chart with new image tag
         run: |
