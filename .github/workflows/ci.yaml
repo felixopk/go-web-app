@@ -95,9 +95,11 @@ jobs:
 
       - name: Update Helm chart with new image tag
         run: |
+          git fetch origin main
+          git reset --hard origin/main
           sed -i "s/tag: .*/tag: ${{ github.run_id }}/" helm/go-web-app-chart/values.yaml
           git config --global user.email "felixoppong2000@yahoo.com"
           git config --global user.name "felixopk"
           git add helm/go-web-app-chart/values.yaml
           git commit -m "Update tag in Helm chart"
-          git push
+          git push origin main
