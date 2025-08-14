@@ -93,20 +93,19 @@ jobs:
         with:
           token: ${{ secrets.TOKEN }}
           fetch-depth: 0
-      - name: Sync with latest main
+
+      - name: Ensure we are on latest main
         run: |
           git fetch origin main
+          git checkout main
           git reset --hard origin/main
-
 
       - name: Update Helm chart with new image tag
         run: |
-          git fetch origin main
-          git reset --hard origin/main
-          sed -i "s/tag: .*/tag: \"${{ github.run_id }}\"/" helm/go-web-app-chart/values.yaml
-
+          echo "Updating Helm chart with new image tag: ${{ github.run_id }}"
+          sed -i "s/tag: .*/tag: ${{ github.run_id }}/" helm/go-web-app-chart/values.yaml
           git config --global user.email "felixoppong2000@yahoo.com"
           git config --global user.name "felixopk"
           git add helm/go-web-app-chart/values.yaml
-          git commit -m "Update tag in Helm chart"
+          git commit -m "Update Helm chart image tag to ${{ github.run_id }}"
           git push origin main
